@@ -1,0 +1,40 @@
+{
+	"schemaVersion": 1,
+	"id": "bibliomurf",
+	"version": "${version}",
+	"name": "BiblioMurf",
+	"description": "The amazing MurfGames library mod",
+	"authors": [
+		"Lloyd 'MurfGames' Archer"
+	],
+	"contact": {
+		"homepage": "https://murfgames.itch.io/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/template-mod/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"net.murfgames.bibliomurf.BiblioMurf"
+		],
+		"client": [
+			"net.murfgames.bibliomurf.BiblioMurfClient"
+		]
+	},
+	"mixins": [
+		{
+			"config": "bibliomurf.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.17.2",
+		"minecraft": "~1.21.8",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
