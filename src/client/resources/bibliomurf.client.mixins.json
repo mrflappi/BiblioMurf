@@ -4,7 +4,10 @@
 	"compatibilityLevel": "JAVA_21",
 	"client": [
 		"FontManagerAccessor",
-		"MinecraftClientAccessor"
+		"MinecraftClientAccessor",
+		"GameOptionsAccessor",
+		"SoundCategoryMixin",
+		"SoundOptionsScreenMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

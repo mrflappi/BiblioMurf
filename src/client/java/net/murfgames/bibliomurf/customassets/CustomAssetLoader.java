@@ -1,4 +1,4 @@
-package net.murfgames.bibliomurf.customasset;
+package net.murfgames.bibliomurf.customassets;
 
 import com.google.gson.Gson;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;

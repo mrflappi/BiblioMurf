@@ -1,4 +1,4 @@
-package net.murfgames.bibliomurf.customasset;
+package net.murfgames.bibliomurf.customassets;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.FontStorage;
