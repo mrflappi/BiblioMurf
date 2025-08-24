@@ -6,6 +6,7 @@
 		"FontManagerAccessor",
 		"MinecraftClientAccessor",
 		"GameOptionsAccessor",
+		"GameOptionsMixin",
 		"SoundCategoryMixin",
 		"SoundOptionsScreenMixin"
 	],

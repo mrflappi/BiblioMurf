@@ -30,6 +30,7 @@ public abstract class SoundCategoryMixin {
             ordinal++;
         }
 
+        CustomSoundCategories.onSoundsInitialized();
         if (ordinal > SoundCategory.values().length)
             BiblioMurf.LOGGER.info("Loaded custom sound categories: {}", CustomSoundCategories.getCategoryInternalNames());
         else

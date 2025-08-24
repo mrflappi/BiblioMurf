@@ -14,6 +14,7 @@ import java.util.*;
 public class CustomSoundCategories {
     private static final Map<String, SoundCategory> CUSTOM_SOUND_CATEGORIES = new HashMap<>();
     private static final Map<String, String> CATEGORY_NAMES = new HashMap<>();
+    private static boolean initialized = false;
 
     // Load category names from JSON
     static {
@@ -52,6 +53,14 @@ public class CustomSoundCategories {
         }
     }
 
+    public static void onSoundsInitialized() {
+        initialized = true;
+    }
+
+    public static boolean isInitialized() {
+        return initialized;
+    }
+
     public static List<String> getCategoryInternalNames() {
         return CATEGORY_NAMES.keySet().stream().toList();
     }
@@ -73,7 +82,7 @@ public class CustomSoundCategories {
     }
 
     public static Optional<SoundCategory> getSafe(String name) {
-        if (CUSTOM_SOUND_CATEGORIES.containsKey(name))
+        if (isInitialized() && CUSTOM_SOUND_CATEGORIES.containsKey(name))
             return Optional.of(get(name));
         else return Optional.empty();
     }

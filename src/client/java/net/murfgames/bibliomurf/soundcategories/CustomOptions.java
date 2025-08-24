@@ -5,24 +5,21 @@ import net.minecraft.client.option.SimpleOption;
 import net.minecraft.sound.SoundCategory;
 import net.murfgames.bibliomurf.mixin.client.GameOptionsAccessor;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
-public class CustomOptionsHelper {
+public class CustomOptions {
 
-    private static final Map<SoundCategory, SimpleOption<Double>> customSoundVolumeLevels = new HashMap<>();
+    private static final Map<SoundCategory, SimpleOption<Double>> soundVolumeLevels = new HashMap<>();
 
     public static void registerCustomOptions() {
         List<SoundCategory> customCategories = CustomSoundCategories.getCategoryInternalNames().stream()
                 .map(CustomSoundCategories::get)
-                .filter(cat -> cat != null)
-                .collect(Collectors.toList());
+                .filter(Objects::nonNull)
+                .toList();
 
         for (SoundCategory category : customCategories) {
-            if (!customSoundVolumeLevels.containsKey(category)) {
+            if (!soundVolumeLevels.containsKey(category)) {
                 SimpleOption<Double> option = new SimpleOption<>(
                         "soundCategory.custom." + category.getName(),
                         s -> null,
@@ -34,13 +31,17 @@ public class CustomOptionsHelper {
                                 .updateSoundVolume(category, value.floatValue())
                 );
 
-                customSoundVolumeLevels.put(category, option);
+                soundVolumeLevels.put(category, option);
             }
         }
     }
 
     @SuppressWarnings("unchecked")
     public static SimpleOption<Double> getSoundVolumeOption(SoundCategory category) {
-        return (SimpleOption<Double>) Objects.requireNonNull((SimpleOption)customSoundVolumeLevels.get(category));
+        return (SimpleOption<Double>) Objects.requireNonNull((SimpleOption) soundVolumeLevels.get(category));
+    }
+
+    public static boolean containsSoundVolumeOption(SoundCategory category) {
+        return soundVolumeLevels.containsKey(category);
     }
 }
