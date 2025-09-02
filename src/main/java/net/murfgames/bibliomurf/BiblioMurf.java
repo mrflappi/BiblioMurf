@@ -2,8 +2,14 @@ package net.murfgames.bibliomurf;
 
 import net.fabricmc.api.ModInitializer;
 
+import net.minecraft.util.Identifier;
+import net.murfgames.bibliomurf.handshake.ServerHandshake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class BiblioMurf implements ModInitializer {
 	public static final String MOD_ID = "bibliomurf";
@@ -13,10 +19,18 @@ public class BiblioMurf implements ModInitializer {
 	// That way, it's clear which mod wrote info, warnings, and errors.
 	public static final Logger LOGGER = LoggerFactory.getLogger("BiblioMurf");
 
+    private static final Map<Identifier, BiblioModule> loadedModules = new HashMap<>();
+
 	@Override
 	public void onInitialize() {
-		// This code runs as soon as Minecraft is in a mod-load-ready state.
-		// However, some things (like resources) may still be uninitialized.
-		// Proceed with mild caution.
+        ServerHandshake.register();
 	}
+
+    public static void registerModule(BiblioModule module) {
+        loadedModules.put(module.getID(), module);
+    }
+
+    public static List<Identifier> getModuleIDs() {
+        return loadedModules.keySet().stream().toList();
+    }
 }
