@@ -3,9 +3,7 @@ package net.murfgames.bibliomurf;
 import net.minecraft.util.Identifier;
 
 public interface BiblioModule {
-    default Identifier getID() {
-        return Identifier.of("bibliomurf", "default");
-    }
+    Identifier getID();
 
     default void registerModule() {
         BiblioMurf.registerModule(this);
