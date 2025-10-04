@@ -9,7 +9,7 @@ import net.murfgames.bibliomurf.BiblioMurf;
 import java.util.ArrayList;
 import java.util.List;
 
-public record HandshakeC2SPayload(List<Identifier> modules) implements CustomPayload {
+public record HandshakeC2SPayload(List<ModuleIdentifier> modules) implements CustomPayload {
     public static final CustomPayload.Id<HandshakeC2SPayload> ID = new Id<>(Identifier.of(BiblioMurf.MOD_ID, "handshake_c2s"));
 
     public static final PacketCodec<RegistryByteBuf, HandshakeC2SPayload> CODEC =
@@ -17,16 +17,16 @@ public record HandshakeC2SPayload(List<Identifier> modules) implements CustomPay
                     // encoder
                     (payload, buf) -> {
                         buf.writeVarInt(payload.modules().size());
-                        for (Identifier id : payload.modules()) {
-                            buf.writeIdentifier(id);
+                        for (ModuleIdentifier module : payload.modules()) {
+                            ModuleIdentifier.CODEC.encode(buf, module);
                         }
                     },
                     // decoder
                     buf -> {
                         int size = buf.readVarInt();
-                        List<Identifier> modules = new ArrayList<>(size);
+                        List<ModuleIdentifier> modules = new ArrayList<>(size);
                         for (int i = 0; i < size; i++) {
-                            modules.add(buf.readIdentifier());
+                            modules.add(ModuleIdentifier.CODEC.decode(buf));
                         }
                         return new HandshakeC2SPayload(modules);
                     }

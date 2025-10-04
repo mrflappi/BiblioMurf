@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ServerHandshake {
-    private static final Map<ServerPlayerEntity, List<Identifier>> MODDED_PLAYERS = new HashMap<>();
+    private static final Map<ServerPlayerEntity, List<ModuleIdentifier>> MODDED_PLAYERS = new HashMap<>();
     private static boolean registered = false;
 
     public static void register() {
@@ -21,11 +21,11 @@ public class ServerHandshake {
         HandshakeRegister.registerPayloadTypes();
 
         ServerPlayNetworking.registerGlobalReceiver(HandshakeC2SPayload.ID, (payload, context) -> {
-            context.player().getServer().execute(() -> {
+            context.server().execute(() -> {
                 MODDED_PLAYERS.put(context.player(), payload.modules());
                 BiblioMurf.LOGGER.info("{} has BiblioMurf installed! {} modules found", context.player().getName().getString(), payload.modules().size());
-                for (Identifier moduleID: payload.modules())
-                    BiblioMurf.LOGGER.info("- Found module: {}", moduleID.toString());
+                for (ModuleIdentifier moduleID: payload.modules())
+                    BiblioMurf.LOGGER.info("- Found module: {}, version: {}", moduleID.identifier().toString(), moduleID.version());
 
                 ServerPlayNetworking.send(context.player(), new HandshakeS2CPayload(BiblioMurf.getModuleIDs()));
             });
@@ -38,11 +38,19 @@ public class ServerHandshake {
         registered = true;
     }
 
+    public static boolean playerHasModule(ModuleIdentifier module, ServerPlayerEntity player) {
+        if (!MODDED_PLAYERS.containsKey(player))
+            return false;
+
+        List<ModuleIdentifier> modules = MODDED_PLAYERS.get(player);
+        return modules.contains(module);
+    }
+
     public static boolean playerHasModule(Identifier module, ServerPlayerEntity player) {
         if (!MODDED_PLAYERS.containsKey(player))
             return false;
 
-        List<Identifier> modules = MODDED_PLAYERS.get(player);
-        return modules.contains(module);
+        List<ModuleIdentifier> modules = MODDED_PLAYERS.get(player);
+        return modules.stream().anyMatch(moduleIdentifier -> moduleIdentifier.identifier() == module);
     }
 }

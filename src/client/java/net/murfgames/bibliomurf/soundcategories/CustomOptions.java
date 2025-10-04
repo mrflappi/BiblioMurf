@@ -2,6 +2,7 @@ package net.murfgames.bibliomurf.soundcategories;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.SimpleOption;
+import net.minecraft.client.sound.SoundPreviewer;
 import net.minecraft.sound.SoundCategory;
 import net.murfgames.bibliomurf.mixin.client.GameOptionsAccessor;
 
@@ -26,9 +27,14 @@ public class CustomOptions {
                         GameOptionsAccessor::getPercentValueOrOffText,
                         SimpleOption.DoubleSliderCallbacks.INSTANCE,
                         1.0,
-                        value -> MinecraftClient.getInstance()
-                                .getSoundManager()
-                                .updateSoundVolume(category, value.floatValue())
+                        value -> {
+                            MinecraftClient client = MinecraftClient.getInstance();
+                            client.getSoundManager().updateSoundVolume(category);
+
+                            if (client.world == null) {
+                                SoundPreviewer.preview(client.getSoundManager(), category, value.floatValue());
+                            }
+                        }
                 );
 
                 soundVolumeLevels.put(category, option);

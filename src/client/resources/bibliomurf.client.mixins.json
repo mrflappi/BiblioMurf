@@ -3,8 +3,6 @@
 	"package": "net.murfgames.bibliomurf.mixin.client",
 	"compatibilityLevel": "JAVA_21",
 	"client": [
-		"FontManagerAccessor",
-		"MinecraftClientAccessor",
 		"GameOptionsAccessor",
 		"GameOptionsMixin",
 		"SoundCategoryMixin",
