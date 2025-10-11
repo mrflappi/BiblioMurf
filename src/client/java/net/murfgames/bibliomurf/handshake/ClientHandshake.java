@@ -47,6 +47,6 @@ public class ClientHandshake {
     }
 
     public static boolean serverHasModule(Identifier module) {
-        return serverModules.stream().anyMatch(moduleIdentifier -> moduleIdentifier.identifier() == module);
+        return serverModules.stream().anyMatch(moduleIdentifier -> moduleIdentifier.identifier().equals(module));
     }
 }
