@@ -36,7 +36,7 @@ public class ClientHandshake {
             serverModules = payload.modules();
             BiblioMurf.LOGGER.info("Server has BiblioMurf installed! {} modules found", serverModules.size());
             for (ModuleIdentifier moduleID: serverModules)
-                BiblioMurf.LOGGER.info("- Found module: {}", moduleID.toString());
+                BiblioMurf.LOGGER.info("- Found module: {}, version: {}", moduleID.identifier().toString(), moduleID.version());
         });
 
         registered = true;
