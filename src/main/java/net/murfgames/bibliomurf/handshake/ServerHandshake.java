@@ -51,6 +51,6 @@ public class ServerHandshake {
             return false;
 
         List<ModuleIdentifier> modules = MODDED_PLAYERS.get(player);
-        return modules.stream().anyMatch(moduleIdentifier -> moduleIdentifier.identifier() == module);
+        return modules.stream().anyMatch(moduleIdentifier -> moduleIdentifier.identifier().equals(module));
     }
 }
