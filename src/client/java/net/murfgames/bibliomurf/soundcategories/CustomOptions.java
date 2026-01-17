@@ -29,7 +29,7 @@ public class CustomOptions {
                         1.0,
                         value -> {
                             MinecraftClient client = MinecraftClient.getInstance();
-                            client.getSoundManager().updateSoundVolume(category);
+                            client.getSoundManager().refreshSoundVolumes(category);
 
                             if (client.world == null) {
                                 SoundPreviewer.preview(client.getSoundManager(), category, value.floatValue());
