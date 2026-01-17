@@ -1,6 +1,5 @@
 package net.murfgames.bibliomurf.customassets;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
@@ -13,8 +12,6 @@ import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
-import net.minidev.json.parser.JSONParser;
-import net.minidev.json.parser.ParseException;
 import net.murfgames.bibliomurf.BiblioMurf;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,9 +25,6 @@ import java.util.function.Predicate;
  * Template for loading custom assets from resources on client reload
  */
 public abstract class CustomAssetLoader {
-
-    private static final JSONParser _jsonParser = new JSONParser(JSONParser.MODE_JSON_SIMPLE);
-    private static final Gson _gson = new Gson();
 
     public void onInitialise() {
 
@@ -119,9 +113,8 @@ public abstract class CustomAssetLoader {
      * @return Loaded and parsed object of the given type
      * @param <T> The type of object that should be returned: must be the same class or be inherited by the <b>codec</b>
      * @throws IOException
-     * @throws ParseException
      */
-    protected <T> T _loadJSONResourceFromId(@NotNull ResourceManager manager, @NotNull Codec<T> codec, Identifier id) throws IOException, ParseException {
+    protected <T> T _loadJSONResourceFromId(@NotNull ResourceManager manager, @NotNull Codec<T> codec, Identifier id) throws IOException {
         // Attempt to load resource found in the given path
         Optional<Resource> resource = manager.getResource(id);
         if (resource.isEmpty()) throw new RuntimeException("Resource could not be found");
@@ -139,9 +132,8 @@ public abstract class CustomAssetLoader {
      * @return Parsed object of the given type
      * @param <T> The type of object that should be returned: must be the same class or be inherited by the <b>codec</b>
      * @throws IOException
-     * @throws ParseException
      */
-    protected <T> T _parseJSONResource(@NotNull Resource resource, @NotNull Codec<T> codec) throws IOException, ParseException {
+    protected <T> T _parseJSONResource(@NotNull Resource resource, @NotNull Codec<T> codec) throws IOException {
         try (InputStreamReader reader = new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8)) {
             JsonElement jsonElement = JsonParser.parseReader(reader);
             DynamicOps<JsonElement> ops = JsonOps.INSTANCE;
