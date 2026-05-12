@@ -9,8 +9,8 @@ public class HandshakeRegister {
         if (registered) return;
 
         // Both sides must know both payloads
-        PayloadTypeRegistry.playC2S().register(HandshakeC2SPayload.ID, HandshakeC2SPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(HandshakeS2CPayload.ID, HandshakeS2CPayload.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(HandshakeC2SPayload.ID, HandshakeC2SPayload.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(HandshakeS2CPayload.ID, HandshakeS2CPayload.CODEC);
 
         registered = true;
     }

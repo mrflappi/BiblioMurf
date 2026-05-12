@@ -6,14 +6,15 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
+import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.murfgames.bibliomurf.BiblioMurf;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -27,20 +28,8 @@ import java.util.function.Predicate;
 public abstract class CustomAssetLoader {
 
     public void onInitialise() {
-
         // Register this asset loader as a reload listener so assets are loaded at the correct time
-        ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
-
-            @Override
-            public Identifier getFabricId() {
-                return Identifier.fromNamespaceAndPath(BiblioMurf.MOD_ID, _getFabricId());
-            }
-
-            @Override
-            public void onResourceManagerReload(ResourceManager manager) {
-                _onReload(manager);
-            }
-        });
+        ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloadListener(_getFabricId(), (ResourceManagerReloadListener) this::_onReload);
     }
 
     /**
@@ -161,6 +150,5 @@ public abstract class CustomAssetLoader {
     /**
      * @return The fabricId registered in the reload listener
      */
-    protected abstract String _getFabricId();
-
+    protected abstract Identifier _getFabricId();
 }

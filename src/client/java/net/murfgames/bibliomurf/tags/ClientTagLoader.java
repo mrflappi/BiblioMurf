@@ -32,8 +32,8 @@ public class ClientTagLoader extends CustomAssetLoader {
     }
 
     @Override
-    protected String _getFabricId() {
-        return "client_tags";
+    protected Identifier _getFabricId() {
+        return Identifier.fromNamespaceAndPath(BiblioMurf.MOD_ID, "client_tags");
     }
 
     public boolean hasTag(String id, Identifier tag) {
