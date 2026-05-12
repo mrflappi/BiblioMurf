@@ -8,10 +8,10 @@ import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
-import net.minecraft.resource.Resource;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.resource.ResourceType;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.murfgames.bibliomurf.BiblioMurf;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,15 +29,15 @@ public abstract class CustomAssetLoader {
     public void onInitialise() {
 
         // Register this asset loader as a reload listener so assets are loaded at the correct time
-        ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
+        ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
 
             @Override
             public Identifier getFabricId() {
-                return Identifier.of(BiblioMurf.MOD_ID, _getFabricId());
+                return Identifier.fromNamespaceAndPath(BiblioMurf.MOD_ID, _getFabricId());
             }
 
             @Override
-            public void reload(ResourceManager manager) {
+            public void onResourceManagerReload(ResourceManager manager) {
                 _onReload(manager);
             }
         });
@@ -56,7 +56,7 @@ public abstract class CustomAssetLoader {
         // Store successfully parsed resources
         Map<Identifier, T> resourceMap = new HashMap<>();
 
-        for(Identifier id : manager.findResources(path, pathLoadAllowed).keySet()) {
+        for(Identifier id : manager.listResources(path, pathLoadAllowed).keySet()) {
             // Attempt to load each resource found in the given path
             try {
                 // Load the resource
@@ -88,14 +88,14 @@ public abstract class CustomAssetLoader {
     protected <T> Codec<T>[] _loadAllJSONResourcesWithId(@NotNull ResourceManager manager, @NotNull Codec<T> codec, String id) {
         ArrayList<T> loaded = new ArrayList<>();
 
-        for (String namespace: manager.getAllNamespaces()) {
-            List<Resource> resources = manager.getAllResources(Identifier.of(namespace, id));
+        for (String namespace: manager.getNamespaces()) {
+            List<Resource> resources = manager.getResourceStack(Identifier.fromNamespaceAndPath(namespace, id));
 
             for (Resource resource : resources) {
                 try {
                     T loadedResource = _parseJSONResource(resource, codec);
                     loaded.add(loadedResource);
-                    resource.getInputStream().close();
+                    resource.open().close();
                 } catch (Exception e) {
                     BiblioMurf.LOGGER.error("Failed to load JSON resource with id {}", id, e);
                 }
@@ -121,7 +121,7 @@ public abstract class CustomAssetLoader {
 
         // Convert InputStream to the given type
         T parsedResource = _parseJSONResource(resource.get(), codec);
-        resource.get().getInputStream().close();
+        resource.get().open().close();
         return parsedResource;
     }
 
@@ -134,7 +134,7 @@ public abstract class CustomAssetLoader {
      * @throws IOException
      */
     protected <T> T _parseJSONResource(@NotNull Resource resource, @NotNull Codec<T> codec) throws IOException {
-        try (InputStreamReader reader = new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8)) {
+        try (InputStreamReader reader = new InputStreamReader(resource.open(), StandardCharsets.UTF_8)) {
             JsonElement jsonElement = JsonParser.parseReader(reader);
             DynamicOps<JsonElement> ops = JsonOps.INSTANCE;
             DataResult<T> result = codec.parse(ops, jsonElement);
@@ -149,7 +149,7 @@ public abstract class CustomAssetLoader {
         String newPath = resourceId.getPath().substring(rootPath.length() + 1);
         newPath = newPath.replace(".json", "");
 
-        return Identifier.of(resourceId.getNamespace(), newPath);
+        return Identifier.fromNamespaceAndPath(resourceId.getNamespace(), newPath);
     }
 
     /**

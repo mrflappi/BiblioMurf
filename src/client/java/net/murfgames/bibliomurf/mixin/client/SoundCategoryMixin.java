@@ -1,7 +1,7 @@
 package net.murfgames.bibliomurf.mixin.client;
 
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.util.Pair;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Tuple;
 import net.murfgames.bibliomurf.BiblioMurf;
 import net.murfgames.bibliomurf.soundcategories.CustomSoundCategories;
 import org.spongepowered.asm.mixin.Mixin;
@@ -11,27 +11,27 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(SoundCategory.class)
+@Mixin(SoundSource.class)
 @Unique
 public abstract class SoundCategoryMixin {
 
     @Invoker("<init>")
-    public static SoundCategory create(String enumName, int ordinal, String name) {
+    public static SoundSource create(String enumName, int ordinal, String name) {
         throw new AssertionError();
     }
 
     @Inject(method = "<clinit>", at = @At("RETURN"))
     private static void onInit(CallbackInfo ci) {
-        int ordinal = SoundCategory.values().length;
+        int ordinal = SoundSource.values().length;
 
-        for (Pair<String, String> categoryName : CustomSoundCategories.getCategoryNames()) {
-            SoundCategory customCategory = create(categoryName.getLeft(), ordinal, categoryName.getRight());
+        for (Tuple<String, String> categoryName : CustomSoundCategories.getCategoryNames()) {
+            SoundSource customCategory = create(categoryName.getA(), ordinal, categoryName.getB());
             CustomSoundCategories.addSoundCategory(customCategory);
             ordinal++;
         }
 
         CustomSoundCategories.onSoundsInitialized();
-        if (ordinal > SoundCategory.values().length)
+        if (ordinal > SoundSource.values().length)
             BiblioMurf.LOGGER.info("Loaded custom sound categories: {}", CustomSoundCategories.getCategoryInternalNames());
         else
             BiblioMurf.LOGGER.info("No custom sound categories were loaded.");

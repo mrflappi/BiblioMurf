@@ -2,8 +2,8 @@ package net.murfgames.bibliomurf.soundcategories;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.util.Pair;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Tuple;
 import net.murfgames.bibliomurf.BiblioMurf;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,7 +12,7 @@ import java.net.URL;
 import java.util.*;
 
 public class CustomSoundCategories {
-    private static final Map<String, SoundCategory> CUSTOM_SOUND_CATEGORIES = new HashMap<>();
+    private static final Map<String, SoundSource> CUSTOM_SOUND_CATEGORIES = new HashMap<>();
     private static final Map<String, String> CATEGORY_NAMES = new HashMap<>();
     private static boolean initialized = false;
 
@@ -65,23 +65,23 @@ public class CustomSoundCategories {
         return CATEGORY_NAMES.keySet().stream().toList();
     }
 
-    public static @NotNull List<Pair<String, String>> getCategoryNames() {
-        List<Pair<String, String>> contents = new ArrayList<>();
+    public static @NotNull List<Tuple<String, String>> getCategoryNames() {
+        List<Tuple<String, String>> contents = new ArrayList<>();
         for (String internalName: getCategoryInternalNames()) {
-            contents.add(new Pair<>(internalName, CATEGORY_NAMES.get(internalName)));
+            contents.add(new Tuple<>(internalName, CATEGORY_NAMES.get(internalName)));
         }
         return contents;
     }
 
-    public static void addSoundCategory(SoundCategory category) {
+    public static void addSoundCategory(SoundSource category) {
         CUSTOM_SOUND_CATEGORIES.put(category.name(), category);
     }
 
-    public static SoundCategory get(String name) {
+    public static SoundSource get(String name) {
         return CUSTOM_SOUND_CATEGORIES.get(name);
     }
 
-    public static Optional<SoundCategory> getSafe(String name) {
+    public static Optional<SoundSource> getSafe(String name) {
         if (isInitialized() && CUSTOM_SOUND_CATEGORIES.containsKey(name))
             return Optional.of(get(name));
         else return Optional.empty();

@@ -1,6 +1,6 @@
 package net.murfgames.bibliomurf;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 
 public interface BiblioModule {
     Identifier getID();

@@ -1,19 +1,19 @@
 package net.murfgames.bibliomurf.handshake;
 
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.Identifier;
 import net.murfgames.bibliomurf.BiblioMurf;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public record HandshakeC2SPayload(List<ModuleIdentifier> modules) implements CustomPayload {
-    public static final CustomPayload.Id<HandshakeC2SPayload> ID = new Id<>(Identifier.of(BiblioMurf.MOD_ID, "handshake_c2s"));
+public record HandshakeC2SPayload(List<ModuleIdentifier> modules) implements CustomPacketPayload {
+    public static final CustomPacketPayload.Type<HandshakeC2SPayload> ID = new Type<>(Identifier.fromNamespaceAndPath(BiblioMurf.MOD_ID, "handshake_c2s"));
 
-    public static final PacketCodec<RegistryByteBuf, HandshakeC2SPayload> CODEC =
-            PacketCodec.of(
+    public static final StreamCodec<RegistryFriendlyByteBuf, HandshakeC2SPayload> CODEC =
+            StreamCodec.ofMember(
                     // encoder
                     (payload, buf) -> {
                         buf.writeVarInt(payload.modules().size());
@@ -33,7 +33,7 @@ public record HandshakeC2SPayload(List<ModuleIdentifier> modules) implements Cus
             );
 
     @Override
-    public Id<? extends CustomPayload> getId() {
+    public Type<? extends CustomPacketPayload> type() {
         return ID;
     }
 }

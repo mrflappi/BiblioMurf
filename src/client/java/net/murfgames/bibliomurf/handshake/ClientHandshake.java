@@ -2,7 +2,7 @@ package net.murfgames.bibliomurf.handshake;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 import net.murfgames.bibliomurf.BiblioMurf;
 
 import java.util.ArrayList;

@@ -2,8 +2,8 @@ package net.murfgames.bibliomurf.handshake;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerPlayer;
 import net.murfgames.bibliomurf.BiblioMurf;
 
 import java.util.HashMap;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ServerHandshake {
-    private static final Map<ServerPlayerEntity, List<ModuleIdentifier>> MODDED_PLAYERS = new HashMap<>();
+    private static final Map<ServerPlayer, List<ModuleIdentifier>> MODDED_PLAYERS = new HashMap<>();
     private static boolean registered = false;
 
     public static void register() {
@@ -38,7 +38,7 @@ public class ServerHandshake {
         registered = true;
     }
 
-    public static boolean playerHasModule(ModuleIdentifier module, ServerPlayerEntity player) {
+    public static boolean playerHasModule(ModuleIdentifier module, ServerPlayer player) {
         if (!MODDED_PLAYERS.containsKey(player))
             return false;
 
@@ -46,7 +46,7 @@ public class ServerHandshake {
         return modules.contains(module);
     }
 
-    public static boolean playerHasModule(Identifier module, ServerPlayerEntity player) {
+    public static boolean playerHasModule(Identifier module, ServerPlayer player) {
         if (!MODDED_PLAYERS.containsKey(player))
             return false;
 

@@ -1,7 +1,7 @@
 package net.murfgames.bibliomurf.mixin.client;
 
-import net.minecraft.client.gui.screen.option.SoundOptionsScreen;
-import net.minecraft.client.option.SimpleOption;
+import net.minecraft.client.OptionInstance;
+import net.minecraft.client.gui.screens.options.SoundOptionsScreen;
 import net.murfgames.bibliomurf.soundcategories.CustomOptions;
 import net.murfgames.bibliomurf.soundcategories.CustomSoundCategories;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,18 +21,18 @@ public abstract class SoundOptionsScreenMixin {
         CustomOptions.registerCustomOptions();
     }
 
-    @Inject(method = "getVolumeOptions", at = @At("RETURN"), cancellable = true)
-    private void injectVolumeOptions(CallbackInfoReturnable<SimpleOption<?>[]> cir) {
-        SimpleOption<?>[] original = cir.getReturnValue();
+    @Inject(method = "getAllSoundOptionsExceptMaster", at = @At("RETURN"), cancellable = true)
+    private void injectVolumeOptions(CallbackInfoReturnable<OptionInstance<?>[]> cir) {
+        OptionInstance<?>[] original = cir.getReturnValue();
 
-        SimpleOption<?>[] customOptions = CustomSoundCategories.getCategoryInternalNames().stream()
+        OptionInstance<?>[] customOptions = CustomSoundCategories.getCategoryInternalNames().stream()
                 .map(CustomSoundCategories::get)
-                .filter(cat -> cat != null && cat != net.minecraft.sound.SoundCategory.MASTER)
+                .filter(cat -> cat != null && cat != net.minecraft.sounds.SoundSource.MASTER)
                 .map(CustomOptions::getSoundVolumeOption)
-                .toArray(SimpleOption[]::new);
+                .toArray(OptionInstance[]::new);
 
-        SimpleOption<?>[] combined = Stream.concat(Arrays.stream(original), Arrays.stream(customOptions))
-                .toArray(SimpleOption[]::new);
+        OptionInstance<?>[] combined = Stream.concat(Arrays.stream(original), Arrays.stream(customOptions))
+                .toArray(OptionInstance[]::new);
 
         cir.setReturnValue(combined);
     }

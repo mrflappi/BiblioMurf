@@ -1,8 +1,8 @@
 package net.murfgames.bibliomurf.tags;
 
-import net.minecraft.registry.tag.TagFile;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.tags.TagFile;
 import net.murfgames.bibliomurf.BiblioMurf;
 import net.murfgames.bibliomurf.customassets.CustomAssetLoader;
 

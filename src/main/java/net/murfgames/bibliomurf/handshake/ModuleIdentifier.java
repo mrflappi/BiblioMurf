@@ -1,20 +1,20 @@
 package net.murfgames.bibliomurf.handshake;
 
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public record ModuleIdentifier(Identifier identifier, String version) {
-    public static final PacketCodec<RegistryByteBuf, ModuleIdentifier> CODEC =
-            PacketCodec.of(
+    public static final StreamCodec<RegistryFriendlyByteBuf, ModuleIdentifier> CODEC =
+            StreamCodec.ofMember(
                     // encoder
                     (module, buf) -> {
                         buf.writeIdentifier(module.identifier());
-                        buf.writeString(module.version());
+                        buf.writeUtf(module.version());
                     },
                     // decoder
-                    buf -> new ModuleIdentifier(buf.readIdentifier(), buf.readString())
+                    buf -> new ModuleIdentifier(buf.readIdentifier(), buf.readUtf())
             );
 
     @Override

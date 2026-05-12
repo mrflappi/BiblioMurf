@@ -6,7 +6,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.Version;
 import net.fabricmc.loader.api.metadata.ModMetadata;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 import net.murfgames.bibliomurf.handshake.ModuleIdentifier;
 import net.murfgames.bibliomurf.handshake.ServerHandshake;
 import org.slf4j.Logger;
