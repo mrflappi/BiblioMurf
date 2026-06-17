@@ -2,8 +2,8 @@ package net.murfgames.bibliomurf.soundcategories;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Tuple;
 import net.murfgames.bibliomurf.BiblioMurf;
 import org.jetbrains.annotations.NotNull;
 
@@ -65,10 +65,10 @@ public class CustomSoundCategories {
         return CATEGORY_NAMES.keySet().stream().toList();
     }
 
-    public static @NotNull List<Tuple<String, String>> getCategoryNames() {
-        List<Tuple<String, String>> contents = new ArrayList<>();
+    public static @NotNull List<Pair<String, String>> getCategoryNames() {
+        List<Pair<String, String>> contents = new ArrayList<>();
         for (String internalName: getCategoryInternalNames()) {
-            contents.add(new Tuple<>(internalName, CATEGORY_NAMES.get(internalName)));
+            contents.add(Pair.of(internalName, CATEGORY_NAMES.get(internalName)));
         }
         return contents;
     }

@@ -1,7 +1,7 @@
 package net.murfgames.bibliomurf.mixin.client;
 
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Tuple;
 import net.murfgames.bibliomurf.BiblioMurf;
 import net.murfgames.bibliomurf.soundcategories.CustomSoundCategories;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,8 +24,8 @@ public abstract class SoundCategoryMixin {
     private static void onInit(CallbackInfo ci) {
         int ordinal = SoundSource.values().length;
 
-        for (Tuple<String, String> categoryName : CustomSoundCategories.getCategoryNames()) {
-            SoundSource customCategory = create(categoryName.getA(), ordinal, categoryName.getB());
+        for (Pair<String, String> categoryName : CustomSoundCategories.getCategoryNames()) {
+            SoundSource customCategory = create(categoryName.getFirst(), ordinal, categoryName.getSecond());
             CustomSoundCategories.addSoundCategory(customCategory);
             ordinal++;
         }
