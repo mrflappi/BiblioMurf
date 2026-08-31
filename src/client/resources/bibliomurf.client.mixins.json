@@ -3,10 +3,6 @@
 	"package": "net.murfgames.bibliomurf.mixin.client",
 	"compatibilityLevel": "JAVA_21",
 	"client": [
-		"GameOptionsAccessor",
-		"GameOptionsMixin",
-		"SoundCategoryMixin",
-		"SoundOptionsScreenMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

@@ -3,7 +3,6 @@
 	"package": "net.murfgames.bibliomurf.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-
 	],
 	"injectors": {
 		"defaultRequire": 1
